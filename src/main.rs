@@ -23,9 +23,19 @@ fn game_of_life(prog_args: &Vec<String>) {
     let mut grid = build_grid(&ncols, &nrows);
     let mut count = 0;
     loop {
+        let alive_count: isize = grid
+            .iter()
+            .map(|ref row| -> isize {
+                row.iter().filter(|cell| **cell).count() as isize
+            })
+            .sum();
+        let dead_count = ncols * nrows - alive_count;
         print_grid(&grid);
         println!("----------");
-        println!("Cycle count: {}", count);
+        println!("Cycle count: {} Alive: {} Dead: {}",
+                 count,
+                 alive_count,
+                 dead_count);
 
         grid = next_gen(&grid);
         std::thread::sleep(pause_length);
